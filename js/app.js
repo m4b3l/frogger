@@ -17,7 +17,7 @@ Enemy.prototype.update = function (dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     if(this.sprite == 'images/enemy-bug.png'){
-        var nx = 500*dt + this.x;
+        var nx = 300*dt + this.x;
         if(nx >= 910){
             this.x = 0;
         }else if(nx < 0){
