@@ -25,7 +25,7 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime;
 
-    canvas.width = 505;
+    canvas.width = 910;
     canvas.height = 606;
     doc.body.appendChild(canvas);
 
@@ -103,6 +103,39 @@ var Engine = (function(global) {
      * they are flipbooks creating the illusion of animation but in reality
      * they are just drawing the entire screen over and over.
      */
+    function renderInit() {
+        /* This array holds the relative URL to the image used
+         * for that particular row of the game level.
+         */
+        var rowImages = [
+                'images/water-block.png', 
+                'images/water-block.png',  
+                'images/water-block.png',  
+                'images/water-block.png',  
+                'images/water-block.png',   
+                'images/water-block.png'    
+            ];
+        var numRows = 6;
+        var numCols = 10;
+
+        for (var row = 0; row < numRows; row++) {
+            for (var col = 0; col < numCols; col++) {
+                var imageToPrint = rowImages[row];
+                if(col == 1 && row == 1){
+                    imageToPrint = 'images/water-per-block.png';
+                }else if(col == 2 && row == 1){
+                    imageToPrint = 'images/water-sona-block.png';   
+                }else if(col == 3 && row == 1){
+                    imageToPrint = 'images/water-jes-block.png';
+                }
+                console.log(imageToPrint);
+                ctx.drawImage(Resources.get(imageToPrint), col * 101, row * 83);
+            }
+        }   
+        
+        player.render();
+    }
+    
     function render() {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
@@ -114,17 +147,16 @@ var Engine = (function(global) {
                 'images/stone-block.png',   // Row 3 of 3 of stone
                 'images/grass-block.png',   // Row 1 of 2 of grass
                 'images/grass-block.png'    // Row 2 of 2 of grass
-            ],
-            numRows = 6,
-            numCols = 5,
-            row, col;
+            ];
+        var numRows = 6;
+        var numCols = 9;
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
          * portion of the "grid"
          */
-        for (row = 0; row < numRows; row++) {
-            for (col = 0; col < numCols; col++) {
+        for (var row = 0; row < numRows; row++) {
+            for (var col = 0; col < numCols; col++) {
                 /* The drawImage function of the canvas' context element
                  * requires 3 parameters: the image to draw, the x coordinate
                  * to start drawing and the y coordinate to start drawing.
@@ -134,12 +166,10 @@ var Engine = (function(global) {
                  */
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
-        }
-
-
+        }   
         renderEntities();
     }
-
+    
     /* This function is called by the render function and is called on each game
      * tick. It's purpose is to then call the render functions you have defined
      * on your enemy and player entities within app.js
@@ -153,6 +183,7 @@ var Engine = (function(global) {
         });
 
         player.render();
+        rock.render();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -172,8 +203,16 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
+        'images/enemy-back-bug.png',
         'images/char-boy.png',
-        'images/char-smiling-boy.png'
+        'images/char-smiling-boy.png',
+        'images/Rock.png',
+        'images/char-back-boy.png',
+        'images/char-left-boy.png',
+        'images/char-right-boy.png',
+        'images/water-per-block.png',
+        'images/water-sona-block.png',
+        'images/water-jes-block.png'
     ]);
     Resources.onReady(init);
 

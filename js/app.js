@@ -8,7 +8,6 @@ var Enemy = function (x, y) {
     this.x = x;
     this.y = y;
     this.sprite = 'images/enemy-bug.png';
-
 };
 
 // Update the enemy's position, required method for game
@@ -17,19 +16,27 @@ Enemy.prototype.update = function (dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    var nx = this.giveMeSpeed()*dt + this.x;
-    if(nx >= 450){
-        this.x = 0;
+    if(this.sprite == 'images/enemy-bug.png'){
+        var nx = 200*dt + this.x;
+        if(nx >= 910){
+            this.x = 0;
+        }else if(nx < 0){
+            this.x = 900;
+        }else{
+            this.x = nx;
+        }
     }else{
-        this.x = nx;
+        var nx = this.x - 200*dt;
+        if(nx >= 910){
+            this.x = 0;
+        }else if(nx < 0){
+            this.x = 900;
+        }else{
+            this.x = nx;
+        }
     }
+    checkCollisions();
 };
-
-Enemy.prototype.giveMeSpeed = function(){
-    var rn = Math.abs(parseInt((Math.random() * 0x100000000) | 0));
-    console.log(rn);
-    return Math.ceil(rn*0.0000003);
-}
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function () {
@@ -40,7 +47,7 @@ Enemy.prototype.render = function () {
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function (){
-    this.x = 200;
+    this.x = 400;
     this.y = 400;
     this.step = 0;
     this.speed = 20;
@@ -54,18 +61,26 @@ Player.prototype.render = function () {
 function checkCollisions(){
     for(var i=0 ; i<3 ; ++i){
         if( Math.abs(allEnemies[i].x-player.x) <= 20 && Math.abs(allEnemies[i].y-player.y) <= 20 ){
-            player.x = 200;
+            player.x = 400;
             player.y = 400;
+        }
+        if( Math.abs(allEnemies[i].x-rock.x) <= 80 && Math.abs(allEnemies[i].y-rock.y) <= 20 ){
+            if(allEnemies[i].sprite == 'images/enemy-back-bug.png'){
+                allEnemies[i].sprite = 'images/enemy-bug.png';
+            }else{
+                allEnemies[i].sprite = 'images/enemy-back-bug.png';
+            }
+            allEnemies[i].render();
         }
     }
 }
 
 Player.prototype.update = function () {
-    if(this.x >=450){
+    if(this.x >=900){
         this.x = 0;
     }
     if(this.x < 0){
-        this.x = 400;
+        this.x = 805;
     }
     if(this.y >= 400){
         this.y = 400;
@@ -85,22 +100,43 @@ Player.prototype.update = function () {
 Player.prototype.handleInput = function ( inputKey ) {
     if(cont){
         if(inputKey == 'left'){
+            this.sprite = 'images/char-left-boy.png';
+            this.render();
             this.x = this.x - 100;
         }else if (inputKey == 'up'){
+            this.sprite = 'images/char-back-boy.png';
+            this.render();
             this.y = this.y - 82;
         }else if (inputKey == 'right'){
+            this.sprite = 'images/char-right-boy.png';
+            this.render();
             this.x = this.x + 100;
         }else if (inputKey == 'down'){
+            this.sprite = 'images/char-boy.png';
+            this.render();
             this.y = this.y + 82;
         }
     }
 };
 
+var Rock = function (){
+    this.x = 404;
+    this.y = 130;
+    this.step = 0;
+    this.speed = 20;
+    this.sprite = 'images/Rock.png';
+};
+
+Rock.prototype.render = function () {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var allEnemies = [new Enemy(0, 60), new Enemy(0, 145), new Enemy(0, 230)];
+var allEnemies = [new Enemy(0, 60), new Enemy(-40, 145), new Enemy(-100, 230)];
 var player = new Player();
+var rock = new Rock();
 var cont = true;
 
 
