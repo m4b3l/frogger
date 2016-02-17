@@ -17,7 +17,7 @@ Enemy.prototype.update = function (dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     if(this.sprite == 'images/enemy-bug.png'){
-        var nx = 200*dt + this.x;
+        var nx = 500*dt + this.x;
         if(nx >= 910){
             this.x = 0;
         }else if(nx < 0){
@@ -49,7 +49,6 @@ Enemy.prototype.render = function () {
 var Player = function (){
     this.x = 400;
     this.y = 400;
-    this.step = 0;
     this.speed = 20;
     this.sprite = 'images/char-boy.png';
 };
@@ -88,7 +87,7 @@ Player.prototype.update = function () {
     if(this.y < -10){
         this.y = -10;
     }
-    if(this.y == -10 && this.sprite == 'images/char-boy.png'){
+    if(this.y == -10 && this.sprite != 'images/char-smiling-boy.png'){
         alert('Ha ganado el juego!!!');
         this.sprite = 'images/char-smiling-boy.png';
         this.render();
@@ -122,8 +121,6 @@ Player.prototype.handleInput = function ( inputKey ) {
 var Rock = function (){
     this.x = 404;
     this.y = 130;
-    this.step = 0;
-    this.speed = 20;
     this.sprite = 'images/Rock.png';
 };
 
